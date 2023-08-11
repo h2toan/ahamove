@@ -5,9 +5,9 @@ import axios from "axios";
 const Server = new Express();
 Server.use(BodyParser.urlencoded({ extended: false }));
 
-Server.post("/", (req, res) => {
+Server.post("/", async (req, res) => {
   let { phone, name, email, company, so_luong_xe } = req.query;
-  sendToAimkt(phone, name, email, company, so_luong_xe);
+  await sendToAimkt(phone, name, email, company, so_luong_xe);
   res.status(200).send();
 });
 
@@ -15,7 +15,7 @@ Server.listen(80, () => {
   console.log("Listening at port 80");
 });
 
-function sendToAimkt(phone, name, email, company, so_luong_xe) {
+async function sendToAimkt(phone, name, email, company, so_luong_xe) {
   let data = JSON.stringify({
     Data: [
       {
@@ -42,7 +42,7 @@ function sendToAimkt(phone, name, email, company, so_luong_xe) {
     data: data,
   };
 
-  axios
+  return axios
     .request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
